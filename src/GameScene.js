@@ -16,6 +16,11 @@ class GameScene extends Scene {
             message2.text = "We twinkle below"
         })
 
+        this.input.on('pointerup',() => {
+            message.text = "Good Morning, Starshine"
+            message2.text = "The Earth Says Hello"
+        })
+
         this.tweens.add({
             targets: logo,
             y: 450,
