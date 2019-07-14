@@ -8,6 +8,8 @@ class GameScene extends Scene {
 
     create(){
         const logo = this.add.image(400, 150, 'logo');
+        const message = this.add.text(100,150,'Good Morning, Starshine')
+        const messag2 = this.add.text(100,180,'The Earth Says Hello')
 
         this.tweens.add({
             targets: logo,
