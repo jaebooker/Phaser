@@ -1,5 +1,6 @@
+import Phaser from 'phaser'
 import GameScene from './GameScene.js';
-var config = {
+const config = {
     type: Phaser.AUTO,
     parent: 'phaser-example',
     width: 800,

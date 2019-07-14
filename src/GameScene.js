@@ -7,7 +7,7 @@ class GameScene extends Scene {
     }
 
     create(){
-        var logo = this.add.image(400, 150, 'logo');
+        const logo = this.add.image(400, 150, 'logo');
 
         this.tweens.add({
             targets: logo,
