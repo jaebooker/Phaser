@@ -2,6 +2,10 @@ import { Scene } from 'phaser'
 
 class GameScene extends Scene {
 
+    constructor(){
+        super();
+        this.score = 0;
+    }
     preload(){
         //this.load.image('logo', 'assets/logo.png');
         this.load.image('sky', 'assets/sky.png');
@@ -19,14 +23,14 @@ class GameScene extends Scene {
         // const sky = this.add.image(0,0,'sky');
         // sky.setOrigin(0,0);
         this.createPlatforms();
+        this.createPlayer();
         this.createStarz();
         //const star = this.add.image(400,300,'star');
         //const logo = this.add.image(400, 150, 'logo');
         const message = this.add.text(100,150,'Good Morning, Starshine');
         const message2 = this.add.text(100,180,'The Earth Says Hello');
-        this.createPlayer();
         this.cursors = this.input.keyboard.createCursorKeys();
-        this.update();
+        //this.update();
         this.input.on('pointerdown',() => {
             message.text = "You twinkle above us"
             message2.text = "We twinkle below"
@@ -37,6 +41,10 @@ class GameScene extends Scene {
             message2.text = "The Earth Says Hello"
         })
 
+        this.scoreText = this.add.text(16, 16, 'score: 0', { fontSize: '32px', fill: '#000' });
+        // this.setInterval(function () {
+        //     this.createStarz();
+        // }, 10);
         // this.tweens.add({
         //     targets: logo,
         //     y: 450,
@@ -101,6 +109,19 @@ class GameScene extends Scene {
             child.setBounceY(Phaser.Math.FloatBetween(0.4, 0.8));
         });
         this.physics.add.collider(this.stars, this.platforms);
+        this.physics.add.overlap(this.player, this.stars, this.starCollector, null, this);
+    }
+
+    starCollector(player, star) {
+        star.disableBody(true, true);
+        this.score += 1;
+        this.scoreText.setText('Score: ' + this.score);
+        if (this.score % 5 == 0){
+            this.createStarz();
+        }
+        if(this.score > 501) {
+            this.scoreText.setText('Oh, no! Star Overdose! You died!')
+        }
     }
 
     update(){
