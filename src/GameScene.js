@@ -16,10 +16,14 @@ class GameScene extends Scene {
 
     create(){
         this.add.image(400, 300, 'sky');
+        // const sky = this.add.image(0,0,'sky');
+        // sky.setOrigin(0,0);
+        this.createStarz();
+        this.createPlatforms();
+        const star = this.add.image(400,300,'star');
         const logo = this.add.image(400, 150, 'logo');
         const message = this.add.text(100,150,'Good Morning, Starshine');
         const message2 = this.add.text(100,180,'The Earth Says Hello');
-
         this.input.on('pointerdown',() => {
             message.text = "You twinkle above us"
             message2.text = "We twinkle below"
@@ -38,6 +42,21 @@ class GameScene extends Scene {
             yoyo: true,
             loop: -1
         });
+    }
+
+    createPlatforms(){
+        //this.add.image(400, 300, 'sky');
+        this.platforms = this.physics.add.staticGroup();
+        this.platforms.create(400, 568, 'ground').setScale(2).refreshBody();
+        this.platforms.create(600, 400, 'ground');
+        this.platforms.create(50, 250, 'ground');
+        this.platforms.create(750, 220, 'ground');
+    }
+
+    createStarz(){
+        for(let i=1;i<40;i+=3){
+            this.add.image(i*10,i*10,'star');
+        }
     }
 }
 
