@@ -25,6 +25,7 @@ class GameScene extends Scene {
         const message = this.add.text(100,150,'Good Morning, Starshine');
         const message2 = this.add.text(100,180,'The Earth Says Hello');
         this.createPlayer();
+        this.cursors = this.input.keyboard.createCursorKeys();
         this.input.on('pointerdown',() => {
             message.text = "You twinkle above us"
             message2.text = "We twinkle below"
@@ -86,6 +87,26 @@ class GameScene extends Scene {
             frameRate: 10,
             repeat: -1
         });
+    }
+    update(){
+        if (this.cursors.left.isDown){
+            this.player.setVelocityX(-160);
+            this.player.anims.play('left', true);
+        }
+        else if (this.cursors.right.isDown) {
+            this.player.setVelocityX(160);
+
+            this.player.anims.play('right', true);
+        }
+        else {
+            this.player.setVelocityX(0);
+
+            this.player.anims.play('turn');
+        }
+
+        if (this.cursors.up.isDown && this.player.body.touching.down) {
+            this.player.setVelocityY(-330);
+        }
     }
 }
 
