@@ -3,7 +3,7 @@ import { Scene } from 'phaser'
 class GameScene extends Scene {
 
     preload(){
-        this.load.image('logo', 'assets/logo.png');
+        //this.load.image('logo', 'assets/logo.png');
         this.load.image('sky', 'assets/sky.png');
         this.load.image('ground', 'assets/platform.png');
         this.load.image('star', 'assets/star.png');
@@ -18,14 +18,15 @@ class GameScene extends Scene {
         this.add.image(400, 300, 'sky');
         // const sky = this.add.image(0,0,'sky');
         // sky.setOrigin(0,0);
-        this.createStarz();
         this.createPlatforms();
-        const star = this.add.image(400,300,'star');
-        const logo = this.add.image(400, 150, 'logo');
+        this.createStarz();
+        //const star = this.add.image(400,300,'star');
+        //const logo = this.add.image(400, 150, 'logo');
         const message = this.add.text(100,150,'Good Morning, Starshine');
         const message2 = this.add.text(100,180,'The Earth Says Hello');
         this.createPlayer();
         this.cursors = this.input.keyboard.createCursorKeys();
+        this.update();
         this.input.on('pointerdown',() => {
             message.text = "You twinkle above us"
             message2.text = "We twinkle below"
@@ -36,14 +37,14 @@ class GameScene extends Scene {
             message2.text = "The Earth Says Hello"
         })
 
-        this.tweens.add({
-            targets: logo,
-            y: 450,
-            duration: 2000,
-            ease: 'Power2',
-            yoyo: true,
-            loop: -1
-        });
+        // this.tweens.add({
+        //     targets: logo,
+        //     y: 450,
+        //     duration: 2000,
+        //     ease: 'Power2',
+        //     yoyo: true,
+        //     loop: -1
+        // });
     }
 
     createPlatforms(){
@@ -55,11 +56,11 @@ class GameScene extends Scene {
         this.platforms.create(750, 220, 'ground');
     }
 
-    createStarz(){
-        for(let i=1;i<40;i+=3){
-            this.add.image(i*10,i*10,'star');
-        }
-    }
+    // createStarz(){
+    //     for(let i=1;i<40;i+=3){
+    //         this.add.image(i*10,i*10,'star');
+    //     }
+    // }
 
     createPlayer(){
         this.player = this.physics.add.sprite(100, 450, 'dude');
@@ -88,9 +89,24 @@ class GameScene extends Scene {
             repeat: -1
         });
     }
+
+    createStarz(){
+        this.stars = this.physics.add.group({
+        key: 'star',
+        repeat: 11,
+        setXY: { x: 12, y: 0, stepX: 70 }
+        });
+
+        this.stars.children.iterate(function (child) {
+            child.setBounceY(Phaser.Math.FloatBetween(0.4, 0.8));
+        });
+        this.physics.add.collider(this.stars, this.platforms);
+    }
+
     update(){
         if (this.cursors.left.isDown){
             this.player.setVelocityX(-160);
+
             this.player.anims.play('left', true);
         }
         else if (this.cursors.right.isDown) {
