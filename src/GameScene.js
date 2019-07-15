@@ -24,6 +24,7 @@ class GameScene extends Scene {
         const logo = this.add.image(400, 150, 'logo');
         const message = this.add.text(100,150,'Good Morning, Starshine');
         const message2 = this.add.text(100,180,'The Earth Says Hello');
+        this.createPlayer();
         this.input.on('pointerdown',() => {
             message.text = "You twinkle above us"
             message2.text = "We twinkle below"
@@ -57,6 +58,33 @@ class GameScene extends Scene {
         for(let i=1;i<40;i+=3){
             this.add.image(i*10,i*10,'star');
         }
+    }
+
+    createPlayer(){
+        this.player = this.physics.add.sprite(100, 450, 'dude');
+
+        this.player.setBounce(0.2);
+        this.player.setCollideWorldBounds(true);
+
+        this.anims.create({
+            key: 'left',
+            frames: this.anims.generateFrameNumbers('dude', { start: 0, end: 3 }),
+            frameRate: 10,
+            repeat: -1
+        });
+
+        this.anims.create({
+            key: 'turn',
+            frames: [ { key: 'dude', frame: 4 } ],
+            frameRate: 20
+        });
+
+        this.anims.create({
+            key: 'right',
+            frames: this.anims.generateFrameNumbers('dude', { start: 5, end: 8 }),
+            frameRate: 10,
+            repeat: -1
+        });
     }
 }
 
