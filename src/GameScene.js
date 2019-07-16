@@ -25,8 +25,8 @@ class GameScene extends Scene {
         // sky.setOrigin(0,0);
         this.createPlatforms();
         this.createPlayer();
-        this.createStarz();
         this.createBombz();
+        this.createStarz();
         //const star = this.add.image(400,300,'star');
         //const logo = this.add.image(400, 150, 'logo');
         const message = this.add.text(100,150,'Good Morning, Starshine');
@@ -117,23 +117,35 @@ class GameScene extends Scene {
     createBombz(){
         this.bombs = this.physics.add.group();
         this.physics.add.collider(this.bombs, this.platforms);
-        this.physics.add.collider(this.player, this.bombs, this.gameOver, null, this);
+        this.physics.add.collider(this.player, this.bombs, this.hitBombz, null, this);
     }
 
     starCollector(player, star) {
         star.disableBody(true, true);
         this.score += 1;
         this.scoreText.setText('Score: ' + this.score);
+        // if (this.score % 5 == 0){
+        //     this.createStarz();
+        // }
+        // if(this.score > 501) {
+        //     this.scoreText.setText('Oh, no! Star Overdose! You died!')
+        //     this.gameOver(player, star);
+        // }
+        // if (this.stars.countActive(true) === 0){
         if (this.score % 5 == 0){
-            this.createStarz();
-        }
-        if(this.score > 501) {
-            this.scoreText.setText('Oh, no! Star Overdose! You died!')
-            this.gameOver(player, star);
+            this.stars.children.iterate(function (child) {
+                child.enableBody(true, child.x, 0, true, true);
+            });
+            const x = (player.x < 400) ? Phaser.Math.Between(400, 800) : Phaser.Math.Between(0, 400);
+            const bomb = this.bombs.create(x, 16, 'bomb');
+            bomb.setBounce(1);
+            bomb.setCollideWorldBounds(true);
+            bomb.setVelocity(Phaser.Math.Between(-200, 200), 20);
         }
     }
 
-    gameOver(player, bomb){
+    hitBombz(player, bomb){
+        this.scoreText.setText('THOU ART DEAD! SCORE: ' + this.score)
         this.physics.pause();
         player.setTint(0xff0000);
         player.anims.play('turn');
