@@ -5,6 +5,7 @@ class GameScene extends Scene {
     constructor(){
         super();
         this.score = 0;
+        this.gameOver = false;
     }
     preload(){
         //this.load.image('logo', 'assets/logo.png');
@@ -25,6 +26,7 @@ class GameScene extends Scene {
         this.createPlatforms();
         this.createPlayer();
         this.createStarz();
+        this.createBombz();
         //const star = this.add.image(400,300,'star');
         //const logo = this.add.image(400, 150, 'logo');
         const message = this.add.text(100,150,'Good Morning, Starshine');
@@ -112,6 +114,12 @@ class GameScene extends Scene {
         this.physics.add.overlap(this.player, this.stars, this.starCollector, null, this);
     }
 
+    createBombz(){
+        this.bombs = this.physics.add.group();
+        this.physics.add.collider(this.bombs, this.platforms);
+        this.physics.add.collider(this.player, this.bombs, this.gameOver, null, this);
+    }
+
     starCollector(player, star) {
         star.disableBody(true, true);
         this.score += 1;
@@ -121,7 +129,15 @@ class GameScene extends Scene {
         }
         if(this.score > 501) {
             this.scoreText.setText('Oh, no! Star Overdose! You died!')
+            this.gameOver(player, star);
         }
+    }
+
+    gameOver(player, bomb){
+        this.physics.pause();
+        player.setTint(0xff0000);
+        player.anims.play('turn');
+        this.gameOver = true;
     }
 
     update(){
